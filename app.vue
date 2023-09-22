@@ -42,24 +42,24 @@
 //     }
 //   }
 // `)
-const { data } = await useAsyncQuery(gql`
-  query {
-    projects {
-      name
-      id
-      client {
-        id
-        name
-      }
-    }
-  }
-`)
+// const { data } = await useAsyncQuery(gql`
+//   query {
+//     projects {
+//       name
+//       id
+//       client {
+//         id
+//         name
+//       }
+//     }
+//   }
+// `)
 
-console.log(data.value)
+// console.log(data.value)
 </script>
 
 <template>
-  <pre>
-    {{ data }}
-  </pre>
+  <NuxtLayout>
+    <h1>Home</h1>
+  </NuxtLayout>
 </template>

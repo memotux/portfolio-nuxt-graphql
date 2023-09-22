@@ -9,4 +9,9 @@ export default defineNuxtConfig({
       }
     },
   },
+  quasar: {
+    config: {
+      dark: true
+    }
+  }
 })
