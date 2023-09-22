@@ -2,12 +2,7 @@
 
 import { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLEnumType } from 'graphql';
 import { v4 as uuidv4 } from 'uuid'
-import type { projects, clients } from "~/server/data";
-
-type Project = typeof projects[0]
-type Projects = typeof projects
-type Client = typeof clients[0]
-type Clients = typeof clients
+import { Project, Projects, Clients, Client } from "./types";
 
 const ClientType = new GraphQLObjectType({
   name: 'Client',
@@ -139,7 +134,7 @@ export const schema = new GraphQLSchema({
 
 async function findItem(type: 'clients' | 'projects', key: 'id' | 'clientId', value: string) {
 
-  const storage = await useStorage().getItem(type) as Array<typeof clients | typeof projects>
+  const storage: Clients | Projects | null = await useStorage().getItem(type)
   if (storage) {
     return storage.find((i: any) => i[key] === value) || null
   }
