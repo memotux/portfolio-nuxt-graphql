@@ -61,5 +61,6 @@
 <template>
   <NuxtLayout>
     <h1>Home</h1>
+    <Clients />
   </NuxtLayout>
 </template>
