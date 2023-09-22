@@ -15,6 +15,11 @@
     "@types/uuid": "^9.0.4",
     "graphql-http": "^1.22.0",
     "nuxt": "^3.7.3",
+    "nuxt-quasar-ui": "^2.0.5",
     "uuid": "^9.0.1"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.16.6",
+    "quasar": "^2.12.7"
   }
 }
