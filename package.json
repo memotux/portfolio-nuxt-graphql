@@ -12,6 +12,7 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxtjs/apollo": "5.0.0-alpha.6",
+    "@types/uuid": "^9.0.4",
     "graphql-http": "^1.22.0",
     "nuxt": "^3.7.3"
   }

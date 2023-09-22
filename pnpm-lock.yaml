@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 devDependencies:
   '@nuxt/devtools':
     specifier: latest
@@ -7,6 +11,9 @@ devDependencies:
   '@nuxtjs/apollo':
     specifier: 5.0.0-alpha.6
     version: 5.0.0-alpha.6(vue@3.3.4)
+  '@types/uuid':
+    specifier: ^9.0.4
+    version: 9.0.4
   graphql-http:
     specifier: ^1.22.0
     version: 1.22.0(graphql@16.8.1)
@@ -1687,6 +1694,10 @@ packages:
 
   /@types/resolve@1.20.2:
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
+    dev: true
+
+  /@types/uuid@9.0.4:
+    resolution: {integrity: sha512-zAuJWQflfx6dYJM62vna+Sn5aeSWhh3OB+wfUEACNcqUSc0AGc5JKl+ycL1vrH7frGTXhJchYjE1Hak8L819dA==}
     dev: true
 
   /@unhead/dom@1.7.4:
@@ -6649,7 +6660,3 @@ packages:
       compress-commons: 5.0.1
       readable-stream: 3.6.2
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
