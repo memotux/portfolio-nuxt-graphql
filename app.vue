@@ -2,7 +2,12 @@
 const { data } = await useAsyncQuery(
   gql`
     query {
-      hello
+      project(id: 1) {
+        name
+        client {
+          name
+        }
+      }
     }
   `
 )
@@ -11,7 +16,7 @@ console.log(data.value)
 </script>
 
 <template>
-  <div>
-    <NuxtWelcome />
-  </div>
+  <pre>
+    {{ data }}
+  </pre>
 </template>
