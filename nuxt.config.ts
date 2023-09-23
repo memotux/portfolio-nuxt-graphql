@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     },
   },
   quasar: {
-    plugins: ['Dialog'],
+    plugins: ['Dialog', 'Notify'],
     config: {
       dark: true
     },
