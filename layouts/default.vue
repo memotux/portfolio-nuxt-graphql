@@ -1,3 +1,9 @@
+<script setup lang="ts">
+useHead({
+  titleTemplate: '%s | Project mTux',
+})
+</script>
+
 <template>
   <QLayout view="hHh lpR fFf">
     <Header />
