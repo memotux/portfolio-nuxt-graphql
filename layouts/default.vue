@@ -2,7 +2,7 @@
   <QLayout view="hHh lpR fFf">
     <Header />
 
-    <QPageContainer>
+    <QPageContainer class="q-pa-xl">
       <slot />
     </QPageContainer>
 
