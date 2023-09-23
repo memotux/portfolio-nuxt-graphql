@@ -7,16 +7,7 @@ useSeoMeta({
   description: "Company's Clients",
 })
 
-const { data, error } = await useAsyncQuery<{ clients: Clients }>(gql`
-  query getClients {
-    clients {
-      id
-      name
-      email
-      phone
-    }
-  }
-`)
+const { data, error } = await useAsyncQuery<{ clients: Clients }>(getClients)
 
 if (error.value) {
   console.error(error.value)
