@@ -173,14 +173,11 @@ async function deleteItem(type: 'clients' | 'projects', id: string) {
   if (storage) {
     const idx = storage.findIndex(i => i.id === id)
     if (idx !== -1) {
-      const item = storage.splice(idx, 1).pop() || null
-      if (item) {
-        await useStorage().setItem(type, storage)
-        return item
-      }
-      return null
+      const [item] = storage.splice(idx, 1)
+      await useStorage().setItem(type, storage)
+      return item
     }
-    return null
+    throw createError("Client can't be found.")
   }
-  return null
+  throw createError("Storage it's empty.")
 }
