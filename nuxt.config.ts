@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   imports: {
-    dirs: ['graphql/**.{ts,js,mjs,mts}']
+    dirs: ['graphql/*.{ts,js,mjs,mts}']
   },
   modules: ["@nuxtjs/apollo", "nuxt-quasar-ui"],
   apollo: {
@@ -13,8 +13,9 @@ export default defineNuxtConfig({
     },
   },
   quasar: {
+    plugins: ['Dialog'],
     config: {
       dark: true
-    }
+    },
   }
 })
