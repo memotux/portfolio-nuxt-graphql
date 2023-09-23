@@ -82,7 +82,7 @@ const mutation = new GraphQLObjectType({
     deleteClient: {
       type: ClientType,
       args: {
-        id: { type: NonNullString }
+        id: { type: new GraphQLNonNull(GraphQLID) }
       },
       async resolve(parent, args: Pick<Client, 'id'>) {
         return await deleteItem('clients', args.id)
@@ -118,7 +118,7 @@ const mutation = new GraphQLObjectType({
     deleteProject: {
       type: ClientType,
       args: {
-        id: { type: NonNullString }
+        id: { type: new GraphQLNonNull(GraphQLID) }
       },
       async resolve(parent, args: Pick<Project, 'id'>) {
         return await deleteItem('projects', args.id)
