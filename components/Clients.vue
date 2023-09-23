@@ -10,6 +10,8 @@ useSeoMeta({
   description: "Company's Clients",
 })
 
+const isModalAddClientOpen = ref(false)
+
 const {
   result,
   loading: isQueryLoading,
@@ -80,17 +82,30 @@ async function onDeleteClient(client: Client) {
 
 <template>
   <div class="q-pa-md">
+    <QDialog v-model="isModalAddClientOpen">
+      <ModalAddClient />
+    </QDialog>
+
     <QTable
       row-key="name"
       :rows="result?.clients || []"
       :columns="columns"
       :loading="isQueryLoading || isMutationLoading"
     >
-      <template v-slot:loading>
+      <template #loading>
         <QInnerLoading
           showing
           size="50px"
           color="secondary"
+        />
+      </template>
+      <template #top>
+        <QBtn
+          color="primary"
+          icon="person_add"
+          label="Add new client"
+          class="offset-10 col-2"
+          @click="isModalAddClientOpen = true"
         />
       </template>
       <template #body-cell-del="props">
