@@ -38,36 +38,43 @@ const columns: QTableProps['columns'] = [
 ]
 
 async function onDeleteClient(client: Client) {
-  let res: FetchResult<{ deleteClient: Client }> | null
+  isMutationLoading.value = true
 
   $q.dialog({
-    title: 'Confirm',
-    message: `Would you like to delete ${client.name}?`,
+    title: 'Confirm delete Client',
+    message: `Would you like to delete client: ${client.name}?`,
     cancel: true,
     persistent: true,
-  }).onOk(async () => {
-    res = await mutate({ id: client.id })
-
-    console.log(res)
-
-    if (res?.errors) {
-      console.error(res.errors)
-
-      throw createError({
-        statusCode: 400,
-        statusMessage: res.errors.map((e: any) => e.message).join('\n'),
-      })
-    }
-
-    if (res?.data?.deleteClient.id) {
-      $q.dialog({
-        title: 'Deleted!',
-        message: `Client ${res.data.deleteClient.name} was deleted!`,
-      }).onDismiss(async () => {
-        await refetch()
-      })
-    }
+    position: 'top',
   })
+    .onOk(async () => {
+      try {
+        const res = await mutate({ id: client.id })
+
+        if (res?.data?.deleteClient.id) {
+          $q.dialog({
+            title: 'Deleted!',
+            message: `Client ${res.data.deleteClient.name} was deleted!`,
+            ok: 'Continue',
+          }).onDismiss(async () => {
+            await refetch()
+            isMutationLoading.value = false
+          })
+        }
+      } catch (error) {
+        console.error(error)
+
+        $q.notify({
+          message: 'Error on deleting client.',
+          type: 'negative',
+          icon: 'error',
+          actions: [{ icon: 'close', color: 'white', round: true }],
+        })
+      }
+    })
+    .onCancel(() => {
+      isMutationLoading.value = false
+    })
 }
 </script>
 
