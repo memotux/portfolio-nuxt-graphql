@@ -2,6 +2,11 @@
 import type { QTableProps } from 'quasar'
 import type { Clients } from '~/server/types'
 
+useSeoMeta({
+  title: 'Clients',
+  description: "Company's Clients",
+})
+
 const { data, error } = await useAsyncQuery<{ clients: Clients }>(gql`
   query getClients {
     clients {
@@ -31,27 +36,20 @@ const columns: QTableProps['columns'] = [
 </script>
 
 <template>
-  <div
-    v-if="error"
-    class="flex justify-center items-center"
-  >
-    <QCircularProgress
-      indeterminate
-      rounded
-      size="50px"
-      color="secondary"
-      class="q-ma-md"
-    />
-  </div>
-  <div
-    v-else
-    class="q-pa-md"
-  >
+  <div class="q-pa-md">
     <QTable
       row-key="name"
       :rows="data.clients"
       :columns="columns"
+      :loading="!error && !data?.clients"
     >
+      <template v-slot:loading>
+        <QInnerLoading
+          showing
+          size="50px"
+          color="secondary"
+        />
+      </template>
       <template #body-cell-del="props">
         <QTd :props="props">
           <QBtn
