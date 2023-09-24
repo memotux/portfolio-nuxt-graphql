@@ -4,11 +4,6 @@ import type { Client, Clients } from '~/server/types'
 
 const $q = useQuasar()
 
-useSeoMeta({
-  title: 'Clients',
-  description: "Company's Clients",
-})
-
 const isModalAddClientOpen = ref(false)
 
 const {

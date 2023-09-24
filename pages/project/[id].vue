@@ -3,8 +3,15 @@ import type { Client, Project } from '~/server/types'
 
 const route = useRoute()
 
-const { data } = useAsyncQuery<{ project: Project & { client: Client } }>(getProject, {
-  id: route.params.id,
+const { data } = await useAsyncQuery<{ project: Project & { client: Client } }>(
+  getProject,
+  {
+    id: route.params.id,
+  }
+)
+
+useSeoMeta({
+  title: () => data.value.project.name,
 })
 
 const statusIcon = computed(() => {
