@@ -80,6 +80,7 @@ async function onDeleteClient(client: Client) {
 </script>
 
 <template>
+  <h2>Clients</h2>
   <div class="q-pa-md">
     <QDialog v-model="isModalAddClientOpen">
       <FormAddClient @close="isModalAddClientOpen = false" />
