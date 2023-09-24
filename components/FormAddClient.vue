@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { QForm, QFormProps } from 'quasar'
+import type { QForm } from 'quasar'
 import type { Client } from '~/server/types'
 
 const initValues: Omit<Client, 'id'> = {
@@ -8,9 +8,35 @@ const initValues: Omit<Client, 'id'> = {
   phone: '',
 }
 
+const $q = useQuasar()
+
+const emits = defineEmits<{
+  (e: 'close'): void
+}>()
+
 const formData = reactive(initValues)
 const isFormValidated = ref(false)
 const formRef = ref<QForm | null>(null)
+
+const { mutate, loading } = useMutation<{ addClient: Client }>(addClient, {
+  // update: (cache, { data }) => {
+  //   const cachedQuery = cache.readQuery<{ clients: Clients }>({ query: getClients })
+
+  //   if (cachedQuery && data) {
+  //     cache.writeQuery({
+  //       query: getClients,
+  //       data: { clients: [...cachedQuery.clients, data.addClient] },
+  //     })
+  //   }
+  // },
+  updateQueries: {
+    getClients: ({ clients }, { mutationResult: { data } }) => {
+      if (!data) return { clients }
+
+      return { clients: [...clients, data.addClient] }
+    },
+  },
+})
 
 const phoneRules = [
   (val: string) => (val !== null && val !== '') || 'Please give us your phone!',
@@ -19,8 +45,30 @@ const phoneRules = [
     Boolean(val.match(/^\+[0-9]+$/g)) || "Must start with '+', and only number after.",
 ]
 
-function onSubmit() {
-  console.log({ formData })
+async function onSubmit() {
+  try {
+    const res = await mutate({ ...formData })
+
+    if (res?.data?.addClient.id) {
+      $q.dialog({
+        title: 'Success!',
+        message: `Client ${res.data.addClient.name} was created!`,
+        ok: 'Continue',
+      }).onDismiss(async () => {
+        onReset()
+        emits('close')
+      })
+    }
+  } catch (error) {
+    console.error(error)
+
+    $q.notify({
+      message: 'Error on creating client.',
+      type: 'negative',
+      icon: 'error',
+      actions: [{ icon: 'close', color: 'white', round: true }],
+    })
+  }
 }
 function onReset() {
   formData.email = ''
@@ -36,17 +84,17 @@ watch(
     console.log('validating data')
 
     if (formRef.value) {
-      formRef.value.validate(false)
+      isFormValidated.value = await formRef.value.validate(false)
     }
   },
   { deep: true }
 )
 
-onMounted(() => {
-  if (formRef.value) {
-    formRef.value.focus()
-  }
-})
+// onMounted(() => {
+//   if (formRef.value) {
+//     formRef.value.focus()
+//   }
+// })
 </script>
 
 <template>
@@ -60,6 +108,7 @@ onMounted(() => {
         dense
         unelevated
         v-close-popup
+        :disable="loading"
       />
     </QToolbar>
     <QCardSection>
@@ -67,8 +116,6 @@ onMounted(() => {
         ref="formRef"
         @submit="onSubmit"
         @reset="onReset"
-        @validation-success="isFormValidated = true"
-        @validation-error="isFormValidated = false"
         class="q-gutter-md"
       >
         <QInput

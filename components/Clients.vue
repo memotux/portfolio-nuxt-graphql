@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { QTableProps } from 'quasar'
 import type { Client, Clients } from '~/server/types'
-import type { FetchResult } from '@apollo/client'
 
 const $q = useQuasar()
 
@@ -83,7 +82,7 @@ async function onDeleteClient(client: Client) {
 <template>
   <div class="q-pa-md">
     <QDialog v-model="isModalAddClientOpen">
-      <ModalAddClient />
+      <FormAddClient @close="isModalAddClientOpen = false" />
     </QDialog>
 
     <QTable
@@ -91,6 +90,7 @@ async function onDeleteClient(client: Client) {
       :rows="result?.clients || []"
       :columns="columns"
       :loading="isQueryLoading || isMutationLoading"
+      :pagination="{ rowsPerPage: 10 }"
     >
       <template #loading>
         <QInnerLoading
