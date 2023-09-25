@@ -4,3 +4,4 @@ export type Project = typeof projects[0]
 export type Projects = typeof projects
 export type Client = typeof clients[0]
 export type Clients = typeof clients
+export type ProjectResult = Project & { client: Client }
