@@ -237,7 +237,7 @@ async function deleteItem(type: 'clients' | 'projects', id: string) {
         let projects: Projects | null = await useStorage().getItem('projects')
         if (projects) {
           if (projects.find(p => p.clientId === id)) {
-            projects = projects.filter(p => p.clientId === id)
+            projects = projects.filter(p => p.clientId !== id)
             await useStorage().setItem('projects', projects)
           }
         }
