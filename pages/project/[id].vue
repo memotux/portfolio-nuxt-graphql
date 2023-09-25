@@ -20,18 +20,6 @@ if (!data.value?.project || error.value) {
 useSeoMeta({
   title: () => data.value.project.name,
 })
-
-const statusIcon = computed(() => {
-  switch (data.value.project.status) {
-    case 'In Progress':
-      return ['rotate_right', 'blue']
-    case 'Done':
-    case 'Completed':
-      return ['check_circle', 'green']
-    default:
-      return ['not_started', 'amber']
-  }
-})
 </script>
 
 <template>
@@ -46,14 +34,7 @@ const statusIcon = computed(() => {
         horizontal
         class="items-center"
       >
-        <h5 class="q-ma-md">Status:</h5>
-        <QChip
-          size="lg"
-          :icon="statusIcon[0]"
-          :color="statusIcon[1]"
-        >
-          {{ data.project.status }}
-        </QChip>
+        <ProjectStatus :status="data.project.status" />
       </QCardSection>
     </QCard>
     <QList

@@ -43,25 +43,26 @@ const onModalClose = () => {
       flat
       bordered
     >
-      <QToolbar>
-        <QToolbarTitle
-          ><h5>{{ project.name }}</h5></QToolbarTitle
-        >
-      </QToolbar>
+      <QCardSection>
+        <h5 class="q-ma-none">{{ project.name }}</h5>
+      </QCardSection>
       <QCardSection
         horizontal
-        class="justify-between items-center q-pa-lg"
+        class="items-center q-pa-lg"
       >
-        <p class="q-ma-none">
-          Status: <strong>{{ project.status }}</strong>
-        </p>
+        <ProjectStatus
+          :status="project.status"
+          chip-size="md"
+        />
+      </QCardSection>
+      <QCardActions class="justify-end">
         <QBtn
           :to="`/project/${project.id}`"
           color="secondary"
           icon-right="arrow_right_alt"
           >VIEW</QBtn
         >
-      </QCardSection>
+      </QCardActions>
     </QCard>
   </div>
 </template>
