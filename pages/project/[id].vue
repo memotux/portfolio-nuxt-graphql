@@ -3,12 +3,19 @@ import type { Client, Project } from '~/server/types'
 
 const route = useRoute()
 
-const { data } = await useAsyncQuery<{ project: Project & { client: Client } }>(
+const { data, error } = await useAsyncQuery<{ project: Project & { client: Client } }>(
   getProject,
   {
     id: route.params.id,
   }
 )
+
+if (!data.value?.project || error.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Project Not Found.',
+  })
+}
 
 useSeoMeta({
   title: () => data.value.project.name,
