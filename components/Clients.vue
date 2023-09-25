@@ -2,20 +2,11 @@
 import type { QTableProps } from 'quasar'
 import type { Client, Clients } from '~/server/types'
 
-const $q = useQuasar()
-
-const isModalAddClientOpen = ref(false)
-
 const {
-  result,
-  loading: isQueryLoading,
+  data: result,
+  pending: isQueryLoading,
   error,
-  refetch,
-} = useQuery<{ clients: Clients }>(getClients)
-
-const { mutate, loading: isMutationLoading } = useMutation<{ deleteClient: Client }>(
-  deleteClient
-)
+} = await useAsyncQuery<{ clients: Clients }>(getClients)
 
 if (error.value) {
   console.error(error.value)
@@ -25,6 +16,14 @@ if (error.value) {
     statusCode: 400,
   })
 }
+
+const $q = useQuasar()
+
+const isModalAddClientOpen = ref(false)
+
+const { mutate, loading: isMutationLoading } = useMutation<{ deleteClient: Client }>(
+  deleteClient
+)
 
 const columns: QTableProps['columns'] = [
   { name: 'name', label: 'Name', field: 'name', align: 'center' },
@@ -53,7 +52,7 @@ async function onDeleteClient(client: Client) {
             message: `Client ${res.data.deleteClient.name} was deleted!`,
             ok: 'Continue',
           }).onDismiss(async () => {
-            await refetch()
+            await refreshNuxtData()
             isMutationLoading.value = false
           })
         }

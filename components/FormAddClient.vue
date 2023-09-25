@@ -21,7 +21,6 @@ const formRef = ref<QForm | null>(null)
 const { mutate, loading } = useMutation<{ addClient: Client }>(addClient, {
   // update: (cache, { data }) => {
   //   const cachedQuery = cache.readQuery<{ clients: Clients }>({ query: getClients })
-
   //   if (cachedQuery && data) {
   //     cache.writeQuery({
   //       query: getClients,
@@ -29,13 +28,12 @@ const { mutate, loading } = useMutation<{ addClient: Client }>(addClient, {
   //     })
   //   }
   // },
-  updateQueries: {
-    getClients: ({ clients }, { mutationResult: { data } }) => {
-      if (!data) return { clients }
-
-      return { clients: [...clients, data.addClient] }
-    },
-  },
+  // updateQueries: {
+  //   getClients: ({ clients }, { mutationResult: { data } }) => {
+  //     if (!data) return { clients }
+  //     return { clients: [...clients, data.addClient] }
+  //   },
+  // },
 })
 
 const phoneRules = [
@@ -56,6 +54,7 @@ async function onSubmit() {
         ok: 'Continue',
       }).onDismiss(async () => {
         onReset()
+        refreshNuxtData()
         emits('close')
       })
     }
