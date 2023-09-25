@@ -1,11 +1,24 @@
 <script lang="ts" setup>
 import type { Projects } from '~/server/types'
 
+const isModalOpen = ref(false)
+
 const { data } = await useAsyncQuery<{ projects: Projects }>(getProjects)
 </script>
 
 <template>
-  <h2>Projects</h2>
+  <QDialog v-model="isModalOpen">
+    <FormAddProject @close="isModalOpen = false" />
+  </QDialog>
+  <h2>
+    Projects
+    <QBtn
+      color="primary"
+      class="q-ml-lg"
+      @click="isModalOpen = true"
+      >Add New Project</QBtn
+    >
+  </h2>
   <div class="q-pa-md flex items-center justify-between q-gutter-xl">
     <QSpinner
       v-if="!data?.projects.length"
