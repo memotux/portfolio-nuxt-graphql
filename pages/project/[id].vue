@@ -3,10 +3,14 @@ import type { Client, Project } from '~/server/types'
 
 const route = useRoute()
 
-const { data, error, refresh } = await useAsyncQuery<{
+const { data, error } = await useAsyncQuery<{
   project: Project & { client: Client }
-}>(getProject, {
-  id: route.params.id,
+}>({
+  query: getProject,
+  key: 'getProject:' + route.params.id,
+  variables: {
+    id: route.params.id,
+  },
 })
 
 if (!data.value?.project || error.value) {
@@ -71,7 +75,7 @@ function onDeleteProject() {
 }
 function onUpdateProject() {
   isModalOpen.value = false
-  refresh()
+  refreshNuxtData('getProject:' + route.params.id)
 }
 </script>
 

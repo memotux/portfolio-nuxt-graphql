@@ -54,7 +54,7 @@ async function onSubmit() {
         ok: 'Continue',
       }).onDismiss(async () => {
         onReset()
-        refreshNuxtData()
+        refreshNuxtData('getClients')
         emits('close')
       })
     }

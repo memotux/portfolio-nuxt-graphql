@@ -6,7 +6,10 @@ const {
   data: result,
   pending: isQueryLoading,
   error,
-} = await useAsyncQuery<{ clients: Clients }>(getClients)
+} = await useAsyncQuery<{ clients: Clients }>({
+  query: getClients,
+  key: 'getClients',
+})
 
 if (error.value) {
   console.error(error.value)
@@ -51,8 +54,8 @@ async function onDeleteClient(client: Client) {
             title: 'Deleted!',
             message: `Client ${res.data.deleteClient.name} was deleted!`,
             ok: 'Continue',
-          }).onDismiss(async () => {
-            await refreshNuxtData()
+          }).onDismiss(() => {
+            refreshNuxtData(['getClients', 'getProjects'])
             isMutationLoading.value = false
           })
         }

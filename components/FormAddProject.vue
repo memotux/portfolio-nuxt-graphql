@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { QForm } from 'quasar'
-import type { Clients, Project } from '~/server/types'
+import type { Project } from '~/server/types'
 
 const initValues: Omit<Project, 'id' | 'clientId'> & {
   clientId: { label?: string; value?: string } | null
@@ -27,12 +27,9 @@ const formData = reactive(initValues)
 const isFormValidated = ref(false)
 const formRef = ref<QForm | null>(null)
 
-const { data } = await useAsyncQuery<{ clients: Clients }>(getClients)
-
 const { mutate, loading } = useMutation<{ addProject: Project }>(addProject, {
   // update: (cache, { data }) => {
   //   const cachedQuery = cache.readQuery<{ projects: Projects }>({ query: getProjects })
-
   //   if (cachedQuery && data) {
   //     cache.writeQuery({
   //       query: getProjects,
@@ -40,19 +37,13 @@ const { mutate, loading } = useMutation<{ addProject: Project }>(addProject, {
   //     })
   //   }
   // },
-  updateQueries: {
-    getProjects: ({ projects }, { mutationResult: { data } }) => {
-      if (!data) return { projects }
-
-      return { projects: [...projects, data.addProject] }
-    },
-  },
+  // updateQueries: {
+  //   getProjects: ({ projects }, { mutationResult: { data } }) => {
+  //     if (!data) return { projects }
+  //     return { projects: [...projects, data.addProject] }
+  //   },
+  // },
 })
-
-const clientOptions = computed(
-  () =>
-    data.value?.clients.map((client) => ({ label: client.name, value: client.id })) || []
-)
 
 async function onSubmit() {
   if (!formData.clientId) return
@@ -65,6 +56,7 @@ async function onSubmit() {
       $q.dialog({
         title: 'Success!',
         message: `Project ${res.data.addProject.name} was created!`,
+        color: 'primary',
         ok: 'Continue',
       }).onDismiss(async () => {
         onReset()
@@ -170,16 +162,7 @@ watch(
           />
         </div>
 
-        <QSelect
-          filled
-          v-model="formData.clientId"
-          :options="clientOptions"
-          label="Select a Client *"
-        >
-          <template #prepend>
-            <QIcon name="person" />
-          </template>
-        </QSelect>
+        <SelectClients v-model="formData.clientId" />
 
         <div class="flex justify-between items-center">
           <QBtn

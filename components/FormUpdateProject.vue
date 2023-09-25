@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { QForm } from 'quasar'
-import type { Clients, ProjectResult, Project } from '~/server/types'
+import type { ProjectResult, Project } from '~/server/types'
 
 const props = defineProps<{ project: ProjectResult }>()
 
@@ -29,14 +29,7 @@ const formData = reactive(initValues)
 const isFormValidated = ref(false)
 const formRef = ref<QForm | null>(null)
 
-const { data } = await useAsyncQuery<{ clients: Clients }>(getClients)
-
 const { mutate, loading } = useMutation<{ updateProject: Project }>(updateProject)
-
-const clientOptions = computed(
-  () =>
-    data.value?.clients.map((client) => ({ label: client.name, value: client.id })) || []
-)
 
 async function onSubmit() {
   if (!formData.clientId) return
@@ -178,16 +171,7 @@ watch(
           />
         </div>
 
-        <QSelect
-          filled
-          v-model="formData.clientId"
-          :options="clientOptions"
-          label="Select a Client *"
-        >
-          <template #prepend>
-            <QIcon name="person" />
-          </template>
-        </QSelect>
+        <SelectClients v-model="formData.clientId" />
 
         <div class="flex justify-between items-center">
           <QBtn

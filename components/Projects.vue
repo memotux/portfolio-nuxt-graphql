@@ -3,12 +3,13 @@ import type { Projects } from '~/server/types'
 
 const isModalOpen = ref(false)
 
-const { data, refresh, pending, error } = await useAsyncQuery<{ projects: Projects }>(
-  getProjects
-)
+const { data, pending, error } = await useAsyncQuery<{ projects: Projects }>({
+  query: getProjects,
+  key: 'getProjects',
+})
 
 const onModalClose = () => {
-  refresh()
+  refreshNuxtData('getProjects')
   isModalOpen.value = false
 }
 </script>
