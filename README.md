@@ -1,6 +1,19 @@
-# Nuxt 3 Minimal Starter
+# Portfolio Nuxt 3 GraphQL
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Server Side
+
+- Use `graphql-http` to create `/api/graphql.post` endpoint.
+- `/server/plugins/data` seed dummy data to Nuxt `useStorage` layer for "database" like system.
+
+## Client Side
+
+- Use Nuxt module `nuxt-apollo` for client petitions.
+- Use Nuxt `useAsyncData` cache system with `useAsyncQuery` to `refreshNuxtData`.
+- use Nuxt module `nuxt-quasar-ui` for UI Framework.
+
+## Template
+
+For application model, I use [Traversy Media](https://github.com/bradtraversy/project-mgmt-graphql) [GraphQL Crash Course with Full Stack MERN Project](https://youtu.be/BcLNfwF04Kw?si=uXXRlWSsdhOoRUyY), refactoring all component logic to VueJS and NuxtJS ecosystem.
 
 ## Setup
 
