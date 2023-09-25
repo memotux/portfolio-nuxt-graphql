@@ -2,16 +2,18 @@
 import type { QForm } from 'quasar'
 import type { Clients, Project } from '~/server/types'
 
-const initValues: Omit<Project, 'id'> = {
+const initValues: Omit<Project, 'id' | 'clientId'> & {
+  clientId: { label?: string; value?: string } | null
+} = {
   name: '',
   description: '',
-  status: '',
-  clientId: '',
+  status: 'new',
+  clientId: null,
 }
 
 const statusOptions = [
-  { label: 'In Progress', value: 'progress' },
   { label: 'Not Started', value: 'new' },
+  { label: 'In Progress', value: 'progress' },
   { label: 'Completed', value: 'completed' },
 ]
 
@@ -25,7 +27,7 @@ const formData = reactive(initValues)
 const isFormValidated = ref(false)
 const formRef = ref<QForm | null>(null)
 
-const { data } = useAsyncQuery<{ clients: Clients }>(getClients)
+const { data } = await useAsyncQuery<{ clients: Clients }>(getClients)
 
 const { mutate, loading } = useMutation<{ addProject: Project }>(addProject, {
   // update: (cache, { data }) => {
@@ -53,8 +55,11 @@ const clientOptions = computed(
 )
 
 async function onSubmit() {
+  if (!formData.clientId) return
+  loading.value = true
+
   try {
-    const res = await mutate({ ...formData })
+    const res = await mutate({ ...formData, clientId: formData.clientId.value })
 
     if (res?.data?.addProject.id) {
       $q.dialog({
@@ -63,12 +68,13 @@ async function onSubmit() {
         ok: 'Continue',
       }).onDismiss(async () => {
         onReset()
+        loading.value = false
         emits('close')
       })
     }
   } catch (error) {
     console.error(error)
-
+    loading.value = false
     $q.notify({
       message: 'Error on creating project.',
       type: 'negative',
@@ -81,7 +87,7 @@ function onReset() {
   formData.description = ''
   formData.name = ''
   formData.status = ''
-  formData.clientId = ''
+  formData.clientId = null
 
   formRef.value?.resetValidation()
 }
@@ -110,7 +116,6 @@ watch(
         dense
         unelevated
         v-close-popup
-        :disable="loading"
       />
     </QToolbar>
     <QCardSection>
@@ -119,6 +124,7 @@ watch(
         @submit="onSubmit"
         @reset="onReset"
         class="q-gutter-md"
+        :disable="loading"
       >
         <QInput
           v-model="formData.name"
@@ -139,7 +145,7 @@ watch(
           v-model="formData.description"
           name="description"
           type="textarea"
-          label="Your project description *"
+          label="Project description *"
           filled
           clearable
           counter
@@ -153,8 +159,8 @@ watch(
           </template>
         </QInput>
 
-        <div>
-          <p class="q-ma-none text-sm">Project Status</p>
+        <div class="flex items-center">
+          <p class="q-ma-none text-sm">Project Status *</p>
           <QOptionGroup
             v-model="formData.status"
             name="status"
@@ -168,7 +174,7 @@ watch(
           filled
           v-model="formData.clientId"
           :options="clientOptions"
-          label="Select a Client..."
+          label="Select a Client *"
         >
           <template #prepend>
             <QIcon name="person" />
